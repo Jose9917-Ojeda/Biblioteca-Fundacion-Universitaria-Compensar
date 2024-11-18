@@ -1,0 +1,196 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ */
+
+package com.mycompany.biblioteca_compensar;
+
+/**
+ *
+ * @author Jose Miguel
+ */
+import java.util.Scanner;
+public class Biblioteca_Compensar {
+    private static final int Max_de_Libros = 100;
+    private static String[][] Libros = new String[Max_de_Libros][5];
+
+    public static void Registrar_Libros(int Sistema) {
+        Scanner Sc = new Scanner(System.in);
+        System.out.print("Código del libro: ");
+        Libros[Sistema][0] = Sc.nextLine();
+        System.out.print("Nombre del libro: ");
+        Libros[Sistema][1] = Sc.nextLine();
+        System.out.print("Autor del libro: ");
+        Libros[Sistema][2] = Sc.nextLine();
+        System.out.print("Materia: ");
+        Libros[Sistema][3] = Sc.nextLine();
+        System.out.print("Número de páginas: ");
+        Libros[Sistema][4] = Sc.nextLine();
+        System.out.println("Libro registrado con éxito.");
+    }
+
+    public static void Actualizar_Inventario_de_Libros(int Sistema) {
+        Scanner Sc = new Scanner(System.in);
+        if (Libros[Sistema][0] == null) {
+            System.out.println("No hay libros registrados en el sistema.");
+            return;
+        }
+        System.out.println("Actualización de los libros.");
+        System.out.print("Nuevo nombre (Dejar vacío para no cambiar): ");
+        String Nuevo_Nombre = Sc.nextLine();
+        if (!Nuevo_Nombre.isEmpty()) Libros[Sistema][1] = Nuevo_Nombre;
+
+        System.out.print("Nuevo autor (Dejar vacío para no cambiar): ");
+        String Nombre_del_Autor = Sc.nextLine();
+        if (!Nombre_del_Autor.isEmpty()) Libros[Sistema][2] = Nombre_del_Autor;
+
+        System.out.print("Nueva materia (Dejar vacío para no cambiar): ");
+        String Materias_a_Registrar = Sc.nextLine();
+        if (!Materias_a_Registrar.isEmpty()) Libros[Sistema][3] = Materias_a_Registrar;
+
+        System.out.print("Nuevo número de páginas (Dejar vacío para no cambiar): ");
+        String Numero_de_Paginas_a_Registrar = Sc.nextLine();
+        if (!Numero_de_Paginas_a_Registrar.isEmpty()) Libros[Sistema][4] = Numero_de_Paginas_a_Registrar;
+
+        System.out.println("Libro actualizado con éxito.");
+    }
+
+    public static void Eliminar_Libros(int Sistema) {
+        if (Libros[Sistema][0] == null) {
+            System.out.println("No hay libros registrados en el sistema.");
+        } else {
+            Libros[Sistema] = new String[5]; // Reiniciar el libro
+            System.out.println("Libro eliminado.");
+        }
+    }
+
+    public static void Buscar_Libros(String Codigo) {
+        for (int i = 0; i < Max_de_Libros; i++) {
+            if (Codigo.equals(Libros[i][0])) {
+                System.out.println("Libro encontrado: " + String.join(", ", Libros[i]));
+                return;
+            }
+        }
+        System.out.println("Libro no encontrado.");
+    }
+
+    public static void Ordenar_Libros(String Campo, String Metodo) {
+        int Campo_Sistema = -1;
+        switch (Campo.toLowerCase()) {
+            case "codigo":
+                Campo_Sistema = 0;
+                break;
+            case "nombre":
+                Campo_Sistema = 1;
+                break;
+            case "autor":
+                Campo_Sistema = 2;
+                break;
+            case "materia":
+                Campo_Sistema = 3;
+                break;
+            case "numero de paginas":
+                Campo_Sistema = 4;
+                break;
+            default:
+                System.out.println("Campo de ordenamiento incorrecto.");
+                return;
+        }
+
+        if (Metodo.equalsIgnoreCase("burbuja")) {
+            for (int i = 0; i < Max_de_Libros - 1; i++) {
+                for (int j = 0; j < Max_de_Libros - 1 - i; j++) {
+                    if (Libros[j][Campo_Sistema] != null && Libros[j + 1][Campo_Sistema] != null &&
+                        Libros[j][Campo_Sistema].compareTo(Libros[j + 1][Campo_Sistema]) > 0) {
+                        String[] Temp = Libros[j];
+                        Libros[j] = Libros[j + 1];
+                        Libros[j + 1] = Temp;
+                    }
+                }
+            }
+            System.out.println("Libros ordenados con el método burbuja.");
+        } else if (Metodo.equalsIgnoreCase("selección")) {
+            for (int i = 0; i < Max_de_Libros - 1; i++) {
+                int minIdx = i;
+                for (int j = i + 1; j < Max_de_Libros; j++) {
+                    if (Libros[j][Campo_Sistema] != null && Libros[minIdx][Campo_Sistema] != null &&
+                        Libros[j][Campo_Sistema].compareTo(Libros[minIdx][Campo_Sistema]) < 0) {
+                        minIdx = j;
+                    }
+                }
+                String[] Temp = Libros[minIdx];
+                Libros[minIdx] = Libros[i];
+                Libros[i] = Temp;
+            }
+            System.out.println("Libros ordenados con el método de selección.");
+        } else {
+            System.out.println("Método de ordenamiento no válido.");
+        }
+    }
+
+    public static void Mostrar_Libros() {
+        System.out.println("Lista de Libros:");
+        for (String[] Libro : Libros) {
+            if (Libro[0] != null) {
+                System.out.println(String.join(", ", Libro));
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner Sc = new Scanner(System.in);
+        while (true) {
+            System.out.println("\nOpciones:");
+            System.out.println("1. Registrar Libro.");
+            System.out.println("2. Actualizar el libro.");
+            System.out.println("3. Eliminar el libro.");
+            System.out.println("4. Buscar el libro.");
+            System.out.println("5. Ordenar el libro.");
+            System.out.println("6. Mostrar los libros.");
+            System.out.println("7. Salir.");
+            System.out.print("Seleccione una opción: ");
+            String Opción = Sc.nextLine();
+
+            switch (Opción) {
+                case "1":
+                    for (int i = 0; i < Max_de_Libros; i++) {
+                        if (Libros[i][0] == null) {
+                            Registrar_Libros(i);
+                            break;
+                        }
+                    }
+                    break;
+                case "2":
+                    System.out.print("Ingrese el libro a actualizar (0 a " + (Max_de_Libros - 1) + "): ");
+                    int Sistema_Actualizar = Integer.parseInt(Sc.nextLine());
+                    Actualizar_Inventario_de_Libros(Sistema_Actualizar);
+                    break;
+                case "3":
+                    System.out.print("Ingrese el  libro a eliminar (0 a " + (Max_de_Libros - 1) + "): ");
+                    int Eliminar_del_Sistema = Integer.parseInt(Sc.nextLine());
+                    Eliminar_Libros(Eliminar_del_Sistema);
+                    break;
+                case "4":
+                    System.out.print("Ingrese el código del libro a buscar: ");
+                    String Buscar_en_el_Sistema = Sc.nextLine();
+                    Buscar_Libros(Buscar_en_el_Sistema);
+                    break;
+                case "5":
+                    System.out.print("Ingrese el campo para ordenar (Código, Nombre, Autor, Materia, Número de páginas): ");
+                    String Campo_de_Ordenamiento = Sc.nextLine();
+                    System.out.print("Ingrese el método de ordenación (Burbuja, Selección): ");
+                    String Metodo_de_Ordenamiento = Sc.nextLine();
+                    Ordenar_Libros(Campo_de_Ordenamiento, Metodo_de_Ordenamiento);
+                    break;
+                case "6":
+                    Mostrar_Libros();
+                    break;
+                case "7":
+                    System.out.println("Saliendo...");
+                    Sc.close();
+                    return;
+                default:
+                    System.out.println("Opción no válida.");
+            }
+        }
+    }
+}
